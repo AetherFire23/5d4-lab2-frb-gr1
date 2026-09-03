@@ -4,16 +4,17 @@ using UnityEngine.Serialization;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject obstaclePrefab;
+    public Vector3 spawnPos = new Vector3(25, 0, 0);
+    public float startDelay = 2f;
+    public float repeatDelay = 2f;
 
-    private Vector3 spawnPos = new Vector3(25, 0, 0);
+    private PlayerController playerControllerScript;
 
-    private float startDelay = 2f;
-    private float repeatDelay = 2f;
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         InvokeRepeating(nameof(SpawnObstacle), startDelay, repeatDelay);
+        this.playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -23,6 +24,9 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnObstacle()
     {
-        Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
+        if (!this.playerControllerScript.gameOver)
+        {
+            Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
+        }
     }
 }
